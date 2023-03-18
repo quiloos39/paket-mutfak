@@ -46,6 +46,19 @@ def print_clusters(clusters):
         location = geolocator.reverse(str(point[0]) + "," + str(point[1]))
         print(point, "location:", location.address)
 
+
+def elbow_method(points):
+    results = []
+    for i in range(1, 21):
+        kmeans = KMeans(n_clusters=i, init='k-means++', max_iter=300, n_init=1)
+        kmeans.fit(points)
+        results.append(kmeans.inertia_)
+
+    plt.plot(range(1, 21), results)
+    plt.title("The Elbow Method (optimized distance)")
+    plt.xlabel("Number of clusters")
+    plt.show()
+
 if __name__ == "__main__":
     MAX_RADIUS = 1 # in KM unit
     NO_POINTS = 1000
@@ -53,7 +66,8 @@ if __name__ == "__main__":
 
     points = generate_points(CENTER, NO_POINTS)
     clusters = cluster_points(points)
-
+    elbow_method(points)
+    
     print_clusters(clusters)
 
 
