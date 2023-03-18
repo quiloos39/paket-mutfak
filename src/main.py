@@ -20,11 +20,11 @@ def convert_radians_to_km(radians):
   return radians * R
 
 
-def cluster_points(points):
+def cluster_points(points, max_radius):
   radians = np.radians(points)
   distances = convert_radians_to_km(haversine_distances(radians))
 
-  dbscan = DBSCAN(eps=MAX_RADIUS, min_samples=1, metric='precomputed')
+  dbscan = DBSCAN(eps=max_radius, min_samples=1, metric='precomputed')
   preds = dbscan.fit_predict(distances)
 
   clusters = {}
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     CENTER = [41.113224, 29.0191758]
 
     points = generate_points(CENTER, NO_POINTS)
-    clusters = cluster_points(points)
+    clusters = cluster_points(points, MAX_RADIUS)
     elbow_method(points)
     
     print_clusters(clusters)
